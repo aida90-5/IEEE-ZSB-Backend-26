@@ -1,0 +1,106 @@
+Table : Student_Grade_Report
+Student_Name PK
+Student_Phone (Multivalued)
+Student_Address (composite)
+Course_Title
+Instructor_Name
+Instructor_Dept (PK for Dept_Building )
+Dept_Building
+Grade
+
+Original Table : 
+Student_Grade_Report
+         | Student_Name | Student_Phone | Student_Address | Course_Title | Instructor_Name | Instructor_Dept | Dept_Building | Grade |
+                |_______________^_______________^________________^_______________^_________      |________________^____|           ^
+                                                                                           |_______________________________________|
+
+What is Normalization?
+    It's the process of decomposing unsatisfactory 
+    relations by breaking their attributes into 
+    smaller relation .
+
+Step 1 :
+      First Normalization Form 
+  Disallow  Nested relations :
+    -Composite attributes(Like Student_Address ) -> Remove Parent and Add Children (City,Street,zip)
+    -Multivalued attributes(Like Student_Phone)-> Make new table with PK (Student_Name,S_Number)
+
+ 1NF :
+ Student_Grade_Report
+         | Student_Name | Course_Title | Instructor_Name | Instructor_Dept | Dept_Building | Grade | City | Street | Zip |
+           ____________          ^               ^         ________________      ^
+                |________________|_______________|_____     |____________________|             ^       ^       ^       ^  
+                                                       |_______________________________________|_______|_______|_______|____
+Student_Phone
+          | Student_Name | S_Number | 
+            ____________   _________
+
+So it's in the First form .
+
+Step 2 :
+     Second Normalization Form
+  Disallow Partial Dependency :
+    Prime attribute is that a member of PK (Student_Name is PK for (City,Street,zip) , Student_Name & Course_Title are PK for Grade 
+       , Course_Title is PK for (Instructor_Dept , Instructor_Name )) -> Make 3 new tables to remove Partial Dependency
+
+
+ 2NF:
+ Student 
+         | Student_Name  | City | Street | Zip |
+           ____________        
+                |________   ^       ^       ^         
+                         |__|_______|_______|
+Student_Phone
+          | Student_Name | S_Number | 
+            ____________   _________
+Enrollment
+         | Student_Name | Course_Title | Grade 
+           ____________   ____________      ^
+                |________________|__________|
+
+Courses
+         | Course_Title | Instructor_Name | Instructor_Dept | Dept_Building |
+            ____________         ^               ^                       
+                |________________|_______________|                     ^
+                                                 |____________________ |
+
+So it's in the Second form .
+Step 3 :
+     Third Normalization Form
+  Disallow Transitive Dependency :
+    Non-primary key depends on Non-primary key(Dept_Building depends on Instructor_Dept which isn't a PK)->Make new table to remove Transitive
+    Dependency
+
+ 3NF:
+ Student 
+         | Student_Name  | City | Street | Zip |
+           ____________        
+                |________   ^       ^       ^         
+                         |__|_______|_______|
+Student_Phone
+          | Student_Name | S_Number | 
+            ____________   _________
+Enrollment
+         | Student_Name | Course_Title | Grade 
+           ____________   ____________      ^
+                |________________|__________|
+
+Courses
+         | Course_Title | Instructor_Name | Instructor_Dept 
+            ____________         ^               ^                       
+                |________________|_______________|                 
+                              
+Courses Building 
+         |Instructor_Dept | Dept_Building |
+         _________________        ^
+                  |_______________|
+So it's in the Third form .
+
+
+Summary:
+     -Step 1: Remove multivalued & composite attributes → 1NF
+     -Step 2: Remove Partial Dependencies → 2NF
+     -Step 3: Remove Transitive Dependencies → 3NF
+
+   
+
